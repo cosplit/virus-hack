@@ -152,9 +152,10 @@ with open("res.csv", mode="w", newline="") as f:
 
     for p_inf_val in p_inf_vals:
         for num_tests_val in num_tests:
-
             for i in range(num_tests_val):
-                pop = [Patient(p_inf_val, j) for j in range(num)]
+                
+                num_pat = round(math.log(0.5) / math.log(1-p_inf))
+                pop = [Patient(p_inf_val, j) for j in range(num_pat)]
 
                 cnt, state, tests_taken = test_group(pop)
                 out = eval_test(pop, state, tests_taken)
