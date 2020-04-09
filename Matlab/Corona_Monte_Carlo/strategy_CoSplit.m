@@ -39,8 +39,8 @@ end
 mid_idx = ceil(size(samples,1)/2);
 %Recursive call of first and second half. Only for those groups, that
 %resulted in a positive test
-[res_a, num_split_a, num_tests_a] = strategy_simple(samples(1:mid_idx,results_temp),tester,test_param);
-[res_b, num_split_b, num_tests_b] = strategy_simple(samples(mid_idx+1:end,results_temp),tester,test_param);
+[res_a, num_split_a, num_tests_a] = strategy_CoSplit(samples(1:mid_idx,results_temp),tester,test_param);
+[res_b, num_split_b, num_tests_b] = strategy_CoSplit(samples(mid_idx+1:end,results_temp),tester,test_param);
 
 %Initialize an array for all samples (even if tested negative during this
 %recursive call

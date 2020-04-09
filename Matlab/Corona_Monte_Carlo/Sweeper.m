@@ -39,7 +39,7 @@ for p_inf_idx = 1:length(p_inf_sw)
             pat_state = rand(n, iterations)<p_inf;
             
             %Run the strategy
-            [results, num_splits, num_tests] = strategy_simple(pat_state, @pcr, pcr_par);
+            [results, num_splits, num_tests] = strategy_CoSplit(pat_state, @pcr_simple, pcr_par);
             %Calculate the average number of test per patient
             test_per_pat = num_tests/numel(pat_state);
             num_tests_per_patient_mean(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = test_per_pat;
