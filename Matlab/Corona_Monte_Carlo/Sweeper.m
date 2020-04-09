@@ -46,9 +46,9 @@ for p_inf_idx = 1:length(p_inf_sw)
             %Save the baseline for individual testing
             efficiency_strategy(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = eff_of_single_test(p_inf_idx) /test_per_pat;
             %Calculate statistics on the number of splits
-            num_splits_mean(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = mean(num_splits,'all');
-            num_splits_std(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = std(num_splits,0,'all');
-            num_splits_max(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = max(num_splits,[],'all');
+            num_splits_mean(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = mean(num_splits(:));
+            num_splits_std(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = std(num_splits(:),0);
+            num_splits_max(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = max(num_splits(:));
             
             %calculate the statistics on the overall PCR
             tp = mean(pat_state(:) == 1 & results(:) == 1);
