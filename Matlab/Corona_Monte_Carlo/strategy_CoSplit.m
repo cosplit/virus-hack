@@ -1,9 +1,11 @@
 classdef strategy_CoSplit
 	properties
-        max_pool_size (1,1) {mustBeInteger} = 100
+        max_pool_size (1,1) {mustBeInteger,mustBePositive} = 100
+        split_factor (1,1) {mustBeGreaterThanOrEqual(split_factor,2)} = 2
+        min_pool_size_for_retesting (1,1) {mustBeInteger,mustBePositive} = 2000
     end
 	methods
-        function [vars] = getVars(obj)
+        function [vars] = getParams(obj)
             vars{1}.name = 'max_pool_size';
             vars{1}.lebel = 'Maximum Pool Size';
             vars{1}.type = 'integer';
@@ -11,9 +13,17 @@ classdef strategy_CoSplit
             vars{1}.min = 1;
             vars{1}.max = inf;
             vars{1}.log_scale = 'false';
+            
+            vars{2}.name = 'split_factor';
+            vars{2}.lebel = 'Split Factor';
+            vars{2}.type = 'numeric';
+            vars{2}.input_type = 'textBox';
+            vars{2}.min = 2;
+            vars{2}.max = inf;
+            vars{2}.log_scale = 'false';
         end
         
-        function [sz] = getOptGroupSZ(obj,p_inf)
+        function [sz] = getGroupSZ(obj,p_inf)
             sz = min(round(-1/log2(1-p_inf)),obj.max_pool_size);
         end
         
@@ -34,7 +44,7 @@ classdef strategy_CoSplit
 
         %Find the size of each group (all groups have similar size)
         sz1 = size(samples,1);
-
+        
         %If the groupsize is zero return
         if sz1 == 0
             results = false(0);
@@ -50,34 +60,49 @@ classdef strategy_CoSplit
         num_tests = size(samples,2);
         %One fraction of each sample was used during testing 
         num_split = ones(size(samples));
+        
+        %if retesting is enabled
+        if(obj.min_pool_size_for_retesting <= sz1)
+            sel = ~results_temp;
+            results_temp(sel) = tester(samples(:,sel),test_param);
+            num_tests = num_tests + sum(sel);
+            num_split(:,sel) = 2;
+        end
+        
+        
+        
         %If each group consists of one person only, return
         if sz1 == 1
             results = results_temp;
             return
         end
         %Otherwise perform split
-        %find center index
-        mid_idx = ceil(size(samples,1)/2);
-        %Recursive call of first and second half. Only for those groups, that
-        %resulted in a positive test
-        [res_a, num_split_a, num_tests_a] = obj.test(samples(1:mid_idx,results_temp),tester,test_param);
-        [res_b, num_split_b, num_tests_b] = obj.test(samples(mid_idx+1:end,results_temp),tester,test_param);
-
+        %find size of first split
+        num_smpl = ceil(size(samples,1)/obj.split_factor);
+        
         %Initialize an array for all samples (even if tested negative during this
         %recursive call
         results = false(size(samples));
-        %Aggregate results by filling the results of those samples, that were split
-        %with the information from the recursive calls.
-        results(:,results_temp) = [res_a;res_b];
-        %Aggregate number of splits.
-        num_split(:,results_temp) = num_split(:,results_temp) + [num_split_a;num_split_b];
-        %Aggregate number of tests.
-        num_tests = num_tests + num_tests_a + num_tests_b;
+        
+        %Recursive call of first and second half. Only for those groups, that
+        %resulted in a positive test
+        for i=1:obj.split_factor
+            sel = (1:num_smpl)+((i-1)*num_smpl);
+            sel(sel>sz1) =[];
+            [res_temp, num_split_temp, num_tests_temp] = obj.test(samples(sel,results_temp),tester,test_param);
+            %Aggregate results by filling the results of those samples, that were split
+            %with the information from the recursive calls.
+            results(sel,results_temp) = res_temp;
+            %Aggregate number of splits.
+            num_split(sel,results_temp) = num_split(sel,results_temp) + num_split_temp;
+            %Aggregate number of tests.
+            num_tests = num_tests + num_tests_temp;
+            if i*num_smpl >= sz1
+                break
+            end
+        end
 
         end
-	function r = multiplyBy(obj,n)
-        r = [obj.Value] * n;
-	end
    end
 end
 
