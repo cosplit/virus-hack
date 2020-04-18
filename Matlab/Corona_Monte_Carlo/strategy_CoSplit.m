@@ -2,7 +2,7 @@ classdef strategy_CoSplit
 	properties
         max_pool_size (1,1) {mustBeInteger,mustBePositive} = 100
         split_factor (1,1) {mustBeGreaterThanOrEqual(split_factor,2)} = 2
-        min_pool_size_for_retesting (1,1) {mustBeInteger,mustBePositive} = 2000
+        min_pool_size_for_retesting (1,1) {mustBeInteger,mustBePositive} = 1e8
     end
 	methods
         function [vars] = getParams(obj)
@@ -25,6 +25,11 @@ classdef strategy_CoSplit
         
         function [sz] = getGroupSZ(obj,p_inf)
             sz = min(round(-1/log2(1-p_inf)),obj.max_pool_size);
+            if(sz <= obj.split_factor)
+                n = 1:min(1e3,obj.max_pool_size);
+                num_t = 1./n + 1-(1-p_inf).^n;
+                sz = n(num_t == min(num_t));
+            end
         end
         
         function [results, num_split, num_tests] = test(obj,samples,tester,test_param)

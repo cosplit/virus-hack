@@ -38,7 +38,7 @@ else
     hold on
 end
 loglog(p_inf_sw,efficiency_strategy);
-legend(label_list);
+legend(label_list,'Location','southeast');
 title("Informational efficiency");
 xlabel("prevalence");
 ylabel("efficiency");
@@ -63,13 +63,13 @@ ylabel("Average number of tests per tested person");
 subplot(2,3,2);
 if(holdflag == 0)
     hold off;
-    plot(p_inf_sw,ones(size(p_inf_sw)));
+    semilogx(p_inf_sw,ones(size(p_inf_sw)));
     hold on;
-    plot(p_inf_sw,pcr_sensitivity*ones(size(p_inf_sw)));
+    semilogx(p_inf_sw,pcr_sensitivity*ones(size(p_inf_sw)));
 else
     hold on
 end
-plot(p_inf_sw,sensitivity);
+semilogx(p_inf_sw,sensitivity);
 legend(label_list);
 title("Sensitivity TP/(TP+FN)");
 xlabel("prevalence");
@@ -78,13 +78,13 @@ ylabel("Sensitivity");
 subplot(2,3,5);
 if(holdflag == 0)
     hold off;
-    plot(p_inf_sw,ones(size(p_inf_sw)));
+    semilogx(p_inf_sw,ones(size(p_inf_sw)));
     hold on;
-    plot(p_inf_sw,pcr_specificity*ones(size(p_inf_sw)));
+    semilogx(p_inf_sw,pcr_specificity*ones(size(p_inf_sw)));
 else
     hold on
 end
-plot(p_inf_sw,specificity);
+semilogx(p_inf_sw,specificity);
 legend(label_list);
 title("Specificity TN/(TN+FP)");
 xlabel("prevalence");
@@ -94,13 +94,13 @@ ylabel("Specificity");
 subplot(2,3,3);
 if(holdflag == 0)
     hold off;
-    plot(p_inf_sw,ones(size(p_inf_sw)));
+    semilogx(p_inf_sw,ones(size(p_inf_sw)));
     hold on;
-    plot(p_inf_sw,pcr_ppv);
+    semilogx(p_inf_sw,pcr_ppv);
 else
     hold on
 end
-plot(p_inf_sw,ppv);
+semilogx(p_inf_sw,ppv);
 legend(label_list);
 title("Positive predictive value TP/(TP+FP)");
 xlabel("prevalence");
@@ -109,13 +109,13 @@ ylabel("PPV");
 subplot(2,3,6);
 if(holdflag == 0)
     hold off;
-    plot(p_inf_sw,ones(size(p_inf_sw)));
+    semilogx(p_inf_sw,ones(size(p_inf_sw)));
     hold on;
-    plot(p_inf_sw,pcr_npv);
+    semilogx(p_inf_sw,pcr_npv);
 else
     hold on
 end
-plot(p_inf_sw,npv);
+semilogx(p_inf_sw,npv);
 legend(label_list);
 title("Negative predictive value TN/(TN+FN)");
 xlabel("prevalence");

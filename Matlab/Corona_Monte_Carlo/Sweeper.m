@@ -15,6 +15,8 @@ sz_out = [length(p_inf_sw),length(pcr_sensitivity),length(pcr_specificity)];
 %Initializing all output arrays
 sensitivity = zeros(sz_out);    %Sensitivity of overall testing
 specificity = zeros(sz_out);    %Specificity of overall testing
+ppv = zeros(sz_out);            %Positive predictive value of overall testing
+npv = zeros(sz_out);            %Negative predictive value of overall testing
 num_tests_per_patient_mean = zeros(sz_out); %Number of tests required per patient on average
 efficiency_strategy = zeros(sz_out);    %Efficiency of the strategy
 num_splits_mean = zeros(sz_out);    %Mean of splits a sample has to undergo
@@ -27,7 +29,9 @@ strat_list = {@strategy_CoSplit,@strategy_CoSplit};
 
 
 cur_strategy = strat_list{1}();
-cur_strategy.max_pool_size = 16;
+%cur_strategy.max_pool_size = inf;
+cur_strategy.split_factor = 1e6;
+%cur_strategy.min_pool_size_for_retesting = 2;
 
 for p_inf_idx = 1:length(p_inf_sw)
     for pcr_sens_idx = 1:length(pcr_sensitivity)
@@ -39,7 +43,7 @@ for p_inf_idx = 1:length(p_inf_sw)
             
             %Calculate the optimum number of people within a group when 
             %assuming a perfect PCR.
-            n = cur_strategy.getOptGroupSZ(p_inf);
+            n = cur_strategy.getGroupSZ(p_inf);
             
             %Randomly generate patients infectedness
             pat_state = rand(n, iterations)<p_inf;
@@ -63,6 +67,9 @@ for p_inf_idx = 1:length(p_inf_sw)
             fn = mean(pat_state(:) == 1 & results(:) == 0);
             sensitivity(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = tp/(tp+fn);
             specificity(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = tn/(tn+fp);
+            
+            ppv(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = tp/(tp+fp);
+            npv(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = tn/(tn+fn);
             
             %Outpunt the progress in the command prompt
             cnt = cnt + 1;
