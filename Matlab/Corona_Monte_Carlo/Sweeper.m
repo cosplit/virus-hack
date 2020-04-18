@@ -66,7 +66,6 @@ for p_inf_idx = 1:length(p_inf_sw)
             
             %Outpunt the progress in the command prompt
             cnt = cnt + 1;
-            hallo = 0;
             fprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100))
         end
     end
