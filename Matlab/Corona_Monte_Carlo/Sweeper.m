@@ -33,6 +33,8 @@ cur_strategy = strat_list{1}();
 cur_strategy.split_factor = 1e6;
 %cur_strategy.min_pool_size_for_retesting = 2;
 
+wb = waitbar(0);
+
 for p_inf_idx = 1:length(p_inf_sw)
     for pcr_sens_idx = 1:length(pcr_sensitivity)
         for pcr_spec_idx = 1:length(pcr_specificity)   
@@ -73,9 +75,10 @@ for p_inf_idx = 1:length(p_inf_sw)
             
             %Outpunt the progress in the command prompt
             cnt = cnt + 1;
-            fprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100))
+            waitbar(cnt/num_sim,wb,sprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100)));
+            %fprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100))
         end
     end
 end
-
+close(wb);
 

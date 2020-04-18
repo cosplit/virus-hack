@@ -1,12 +1,22 @@
-function [label_list] = plotit(name_label,label_list)
+function [] = plotit(name_label)
 %PLOTIT Summary of this function goes here
 %   Detailed explanation goes here
 holdflag = 1;
-if ~exist("label_list")
+persistent label_list
+persistent fig
+if isempty(fig)
+    fig = figure;
+end
+if isempty(label_list) || ~exist("name_label")
     holdflag = 0;
     label_list = ["optimal";"individual test"];
 end
-label_list = [label_list;name_label];
+
+plotnew_flag = 0;
+if exist("name_label")
+    label_list = [label_list;name_label];
+    plotnew_flag = 1;
+end
 
 p_inf_sw = evalin('base', 'p_inf_sw');
 eff_of_single_test = evalin('base', 'eff_of_single_test');
@@ -37,7 +47,9 @@ if(holdflag == 0)
 else
     hold on
 end
-loglog(p_inf_sw,efficiency_strategy);
+if plotnew_flag
+    loglog(p_inf_sw,efficiency_strategy);
+end
 legend(label_list,'Location','southeast');
 title("Informational efficiency");
 xlabel("prevalence");
@@ -53,7 +65,9 @@ if(holdflag == 0)
 else
     hold on
 end
-loglog(p_inf_sw,num_tests_per_patient_mean);
+if plotnew_flag
+    loglog(p_inf_sw,num_tests_per_patient_mean);
+end
 legend(label_list);
 title("Average number of tests per tested person");
 xlabel("prevalence");
@@ -69,7 +83,9 @@ if(holdflag == 0)
 else
     hold on
 end
-semilogx(p_inf_sw,sensitivity);
+if plotnew_flag
+    semilogx(p_inf_sw,sensitivity);
+end
 legend(label_list);
 title("Sensitivity TP/(TP+FN)");
 xlabel("prevalence");
@@ -84,7 +100,9 @@ if(holdflag == 0)
 else
     hold on
 end
-semilogx(p_inf_sw,specificity);
+if plotnew_flag
+    semilogx(p_inf_sw,specificity);
+end
 legend(label_list);
 title("Specificity TN/(TN+FP)");
 xlabel("prevalence");
@@ -100,7 +118,9 @@ if(holdflag == 0)
 else
     hold on
 end
-semilogx(p_inf_sw,ppv);
+if plotnew_flag
+    semilogx(p_inf_sw,ppv);
+end
 legend(label_list);
 title("Positive predictive value TP/(TP+FP)");
 xlabel("prevalence");
@@ -115,7 +135,9 @@ if(holdflag == 0)
 else
     hold on
 end
-semilogx(p_inf_sw,npv);
+if plotnew_flag
+    semilogx(p_inf_sw,npv);
+end
 legend(label_list);
 title("Negative predictive value TN/(TN+FN)");
 xlabel("prevalence");
