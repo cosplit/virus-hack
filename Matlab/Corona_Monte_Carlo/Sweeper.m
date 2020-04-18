@@ -23,6 +23,12 @@ num_splits_max = zeros(sz_out); %Max of splits a sample has to undergo
 cnt = 0;
 num_sim = prod(sz_out); %number of parameter combinations
 
+strat_list = {@strategy_CoSplit,@strategy_CoSplit};
+
+
+cur_strategy = strat_list{1}();
+cur_strategy.max_pool_size = 16;
+
 for p_inf_idx = 1:length(p_inf_sw)
     for pcr_sens_idx = 1:length(pcr_sensitivity)
         for pcr_spec_idx = 1:length(pcr_specificity)   
@@ -33,13 +39,13 @@ for p_inf_idx = 1:length(p_inf_sw)
             
             %Calculate the optimum number of people within a group when 
             %assuming a perfect PCR.
-            n = round(-1/log2(1-p_inf));
+            n = cur_strategy.getOptGroupSZ(p_inf);
             
             %Randomly generate patients infectedness
             pat_state = rand(n, iterations)<p_inf;
             
             %Run the strategy
-            [results, num_splits, num_tests] = strategy_CoSplit(pat_state, @pcr_simple, pcr_par);
+            [results, num_splits, num_tests] = cur_strategy.test(pat_state, @pcr_simple, pcr_par);
             %Calculate the average number of test per patient
             test_per_pat = num_tests/numel(pat_state);
             num_tests_per_patient_mean(p_inf_idx,pcr_sens_idx,pcr_spec_idx) = test_per_pat;
