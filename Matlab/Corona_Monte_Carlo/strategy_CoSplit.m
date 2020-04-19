@@ -1,26 +1,44 @@
 classdef strategy_CoSplit
 	properties
-        max_pool_size (1,1) {mustBeInteger,mustBePositive} = 100
+        max_pool_size (1,1) {mustBeInteger,mustBePositive} = 128
         split_factor (1,1) {mustBeGreaterThanOrEqual(split_factor,2)} = 2
         min_pool_size_for_retesting (1,1) {mustBeInteger,mustBePositive} = 1e8
+        retesting_if_counterintuitive (1,1) {mustBeNumericOrLogical} = false
     end
 	methods
         function [vars] = getParams(obj)
             vars{1}.name = 'max_pool_size';
-            vars{1}.lebel = 'Maximum Pool Size';
+            vars{1}.label = 'Maximum Pool Size';
             vars{1}.type = 'integer';
             vars{1}.input_type = 'textBox';
             vars{1}.min = 1;
             vars{1}.max = inf;
+            vars{1}.default = 128;
             vars{1}.log_scale = 'false';
             
             vars{2}.name = 'split_factor';
-            vars{2}.lebel = 'Split Factor';
+            vars{2}.label = 'Split Factor';
             vars{2}.type = 'numeric';
             vars{2}.input_type = 'textBox';
             vars{2}.min = 2;
             vars{2}.max = inf;
+            vars{2}.default = 2;
             vars{2}.log_scale = 'false';
+            
+            vars{3}.name = 'min_pool_size_for_retesting';
+            vars{3}.label = 'min_pool_size_for_retesting';
+            vars{3}.type = 'numeric';
+            vars{3}.input_type = 'textBox';
+            vars{3}.min = 1;
+            vars{3}.max = inf;
+            vars{3}.default = 1e8;
+            vars{3}.log_scale = 'false';
+            
+            vars{4}.name = 'retesting_if_counterintuitive';
+            vars{4}.label = 'retesting if counterintuitive';
+            vars{4}.type = 'logical';
+            vars{4}.default = false;
+            vars{4}.input_type = 'switch';
         end
         
         function [sz] = getGroupSZ(obj,p_inf)
@@ -32,7 +50,7 @@ classdef strategy_CoSplit
             end
         end
         
-        function [results, num_split, num_tests] = test(obj,samples,tester,test_param)
+        function [results, num_split, num_tests] = test(obj,samples,tester)
         %Runs the Cosplit strategy on the samples while using the tester which
         %represents the underlying biomedical modell of e.g. PCR testing
         %   CoSplit tests each group (each column in samples) as a whole in first
@@ -60,7 +78,7 @@ classdef strategy_CoSplit
         end
 
         %Perform the test on all groups
-        results_temp = tester(samples,test_param);
+        results_temp = tester.test(samples);
         %The number of performed tests is the number of groups (one test per group)
         num_tests = size(samples,2);
         %One fraction of each sample was used during testing 
@@ -69,11 +87,10 @@ classdef strategy_CoSplit
         %if retesting is enabled
         if(obj.min_pool_size_for_retesting <= sz1)
             sel = ~results_temp;
-            results_temp(sel) = tester(samples(:,sel),test_param);
+            results_temp(sel) = tester(samples(:,sel));
             num_tests = num_tests + sum(sel);
             num_split(:,sel) = 2;
         end
-        
         
         
         %If each group consists of one person only, return
@@ -94,7 +111,7 @@ classdef strategy_CoSplit
         for i=1:obj.split_factor
             sel = (1:num_smpl)+((i-1)*num_smpl);
             sel(sel>sz1) =[];
-            [res_temp, num_split_temp, num_tests_temp] = obj.test(samples(sel,results_temp),tester,test_param);
+            [res_temp, num_split_temp, num_tests_temp] = obj.test(samples(sel,results_temp),tester);
             %Aggregate results by filling the results of those samples, that were split
             %with the information from the recursive calls.
             results(sel,results_temp) = res_temp;
@@ -106,8 +123,26 @@ classdef strategy_CoSplit
                 break
             end
         end
-
+        
+        if obj.retesting_if_counterintuitive
+            results_temp = results_temp & ~any(results,1);
+            for i=1:obj.split_factor
+                sel = (1:num_smpl)+((i-1)*num_smpl);
+                sel(sel>sz1) =[];
+                [res_temp, num_split_temp, num_tests_temp] = obj.test(samples(sel,results_temp),tester);
+                %Aggregate results by filling the results of those samples, that were split
+                %with the information from the recursive calls.
+                results(sel,results_temp) = res_temp;
+                %Aggregate number of splits.
+                num_split(sel,results_temp) = num_split(sel,results_temp) + num_split_temp;
+                %Aggregate number of tests.
+                num_tests = num_tests + num_tests_temp;
+                if i*num_smpl >= sz1
+                    break
+                end
+            end
         end
+     end
    end
 end
 
