@@ -1,6 +1,6 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration file="C:\Users\kuoyi\Documents\PoolParty\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction.prj" location="C:\Users\kuoyi\Documents\PoolParty\virus-hack\Matlab\Corona_Monte_Carlo\App" name="Interaction" target="target.ezdeploy.standalone" target-name="Application Compiler">
-    <param.appname>PoolParty</param.appname>
+  <configuration build-checksum="2307193480" file="C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction.prj" location="C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\App" name="Interaction" preferred-package-location="C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>FinalSimulation</param.appname>
     <param.icon />
     <param.icons />
     <param.version>1.0</param.version>
@@ -11,7 +11,7 @@
     <param.description />
     <param.screenshot>C:\Users\kuoyi\Documents\Cosplit\virus-hack\Matlab\Corona_Monte_Carlo\App\Pool Party 5.png</param.screenshot>
     <param.guid />
-    <param.installpath.string>\TUM\PoolParty\</param.installpath.string>
+    <param.installpath.string>\TUM\FinalSimulation\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
     <param.logo />
     <param.install.notes />
@@ -46,6 +46,9 @@
       <param.icon />
       <param.icons />
       <param.version />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
       <param.summary />
       <param.description />
       <param.guid />
@@ -78,13 +81,25 @@
     <fileset.main>
       <file>${PROJECT_ROOT}\Interaction.mlapp</file>
     </fileset.main>
-    <fileset.resources />
+    <fileset.resources>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\efficiency_of_a_single_test.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\pcr_advanced.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\pcr_simple.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\plotit.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\strategy_CoSplit.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\Sweeper.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\Sweeper_API.m</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\TestInteraction.mlapp</file>
+      <file>C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\viral_load.mat</file>
+    </fileset.resources>
     <fileset.package />
-    <fileset.depfun />
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\LogoApp.png</file>
+    </fileset.depfun>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\Interaction\for_testing" name="readme.txt" optional="true">C:\Users\kuoyi\Documents\PoolParty\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_testing\readme.txt</file>
-      <file location="${PROJECT_ROOT}\Interaction\for_testing" name="splash.png" optional="false">C:\Users\kuoyi\Documents\PoolParty\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_testing\splash.png</file>
-      <file location="${PROJECT_ROOT}\Interaction\for_testing" name="PoolParty.exe" optional="false">C:\Users\kuoyi\Documents\PoolParty\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_testing\PoolParty.exe</file>
+      <file location="${PROJECT_ROOT}\Interaction\for_testing" name="splash.png" optional="false">C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\Interaction\for_testing" name="readme.txt" optional="true">C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\Interaction\for_testing" name="FinalSimulation.exe" optional="false">C:\Users\kuoyi\Documents\NewWorkSpace\virus-hack\Matlab\Corona_Monte_Carlo\App\Interaction\for_testing\FinalSimulation.exe</file>
     </build-deliverables>
     <workflow />
     <matlab>
