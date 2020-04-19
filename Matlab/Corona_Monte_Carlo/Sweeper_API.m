@@ -68,12 +68,13 @@ for p_inf_idx = 1:length(p_inf_sw)
             
             %Outpunt the progress in the command prompt
             cnt = cnt + 1;
-            %waitbar(cnt/num_sim,wb,sprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100)));
+            waitbar(cnt/num_sim,wb,sprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100)));
             fprintf("Progress:%3d%%.\n",uint8(cnt/num_sim*100))
         end
     end
 end
 
+report.p_inf = p_inf_sw;
 report.eff_of_single_test = eff_of_single_test;
 report.num_splits_max = num_splits_max;
 report.efficiency_strategy = efficiency_strategy;

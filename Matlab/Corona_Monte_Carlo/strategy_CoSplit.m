@@ -87,7 +87,7 @@ classdef strategy_CoSplit
         %if retesting is enabled
         if(obj.min_pool_size_for_retesting <= sz1)
             sel = ~results_temp;
-            results_temp(sel) = tester(samples(:,sel));
+            results_temp(sel) = tester.test(samples(:,sel));
             num_tests = num_tests + sum(sel);
             num_split(:,sel) = 2;
         end
