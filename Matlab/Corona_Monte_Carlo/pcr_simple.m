@@ -1,7 +1,7 @@
 classdef pcr_simple
 	properties
-        sensitivity (1,1) {mustBeGreaterThanOrEqual(sensitivity,0),mustBeLessThanOrEqual(sensitivity,1)} = 0.99
-        specificity (1,1) {mustBeGreaterThanOrEqual(specificity,0),mustBeLessThanOrEqual(specificity,1)} = 0.98
+        sensitivity (1,1) {mustBeGreaterThanOrEqual(sensitivity,0),mustBeLessThanOrEqual(sensitivity,1)} = 0.98
+        specificity (1,1) {mustBeGreaterThanOrEqual(specificity,0),mustBeLessThanOrEqual(specificity,1)} = 0.99
     end
 	methods
         function [patient] = generatePatients(obj,groupsize,iterations,p_inf)

@@ -1,6 +1,6 @@
 classdef pcr_advanced
 	properties
-        min_concentration = 4
+        min_concentration = 1
         max_concentration = 10
         sensitivity_above_max = 0.995
         prob_primer_cluster = 0.01;
