@@ -11,6 +11,53 @@
 \usepackage[version=3]{mhchem}
 
 
+
+\begin{filecontents}{acros.tmp}
+	%================================%
+	% ACRONYMS        =================%
+	%================================%
+	% HRC ACROS
+	\newacronym{HRC}{HRC}{Human-Robot Collaboration}
+	\newacronym{mcs}{MCS}{Monte Carlo simulation}
+	%    \newacronym{HRI}{HRI}{Human-Robot Interaction}
+	%    \newacronym{pHRI}{pHRI}{physical Human-Robot Interaction}
+	%    \newacronym{HRT}{HRT}{Human-Robot team}
+	%    \newacronym{RAP}{RAP}{Relational Activity Process}
+	%    \newacronym{HATP}{HATP}{Hierarchical Agent-based Task Planner}
+	%    \newacronym{TCP}{TCP}{tool center point}
+	%    \newacronym[sort={DOF},firstplural={degrees of freedom(DoFs)}]{DOF}{DoF}{degree of freedom}
+	%    \newacronym{DMP}{DMP}{dynamic movement primitive}
+	%    \newacronym{TAMP}{TAMP}{task and motion planning}
+	%    \acrodefplural{Kuka}{\emph{KUKA LWR 4+}}%
+	% ML abbr.
+	%    \newacronym{IOC}{IOC}{inverse optimal control}
+	%    \newacronym{IRL}{IRL}{inverse reinforcement learning}
+	%    \newacronym{PIBBO}{PIBBO}{policy improvement through black-box optimization}
+	% GAME THEORY abbreviations
+	%    \newacronym{BaGA}{BaGA}{Bayesian game approximation algorithm}
+	%    \newacronym{POSG}{POSG}{partially observable stochastic game}
+	%    \newacronym[sort={br}]{br}{\ensuremath{\br}}{best response}
+	%    \newacronym[sort={bre}]{ebr}{\ensuremath{\ebr}}{\gls{epsilon}-best response}
+	%    \newacronym[sort={NE},firstplural={Nash-Equilibria~(NEs)}]{NE}{NE}{Nash-Equilibrium}
+	%    \newacronym[sort={NEe}, firstplural={\gls{epsilon}-Nash-Equilibria~(\ensuremath{\eNE}s)}]{eNE}{\ensuremath{\eNE}}{\gls{epsilon}-Nash-Equilibrium}
+	%    \newacronym[sort={dGL}]{dGL}{\ensuremath{dG\fL}}{hybrid differential game logic}
+	
+	% AI abbr.
+	%    \newacronym{DBN}{DBN}{dynamic Bayesian network}
+	%    \newacronym{STRIPS}{STRIPS}{Stanford Research Institute Problem Solver}
+	%    \newacronym{FOL}{FOL}{first-order-logic}
+	%    \newacronym{LTL}{LTL}{linear temporal logic}
+	%    \newacronym{DFO}{DFO}{depth-first-order}
+	%    \newacronym{KB}{KB}{Knowledge Base}
+	%    \newacronym[firstplural={finite state automata~(FSAs)}]{FSA}{FSA}{finite-state automaton}
+	% Markov Process variants
+	
+	\newacronym{COR}{COR}{center of rotation}
+	\newacronym{LS}{LS}{limit surface}
+	\newacronym{ROS}{ROS}{Robot Operating System}
+	
+\end{filecontents}
+
 \DeclareSIUnit{\Bit}{~Bit}
 \title{Improving Pooling-Strategies for Increasing the Test Capacity and Reliability of RT-qPCR of Samples out of Populations with low Prevalence} 
 
@@ -157,39 +204,111 @@ We assume that \SI{1}{\milli\liter} with $n_{vir} = c_{vir} \cdot \SI{1}{\milli\
 \subsection{Strategy Evaluation Measure}
 Common measures for evaluating the quality or correctness of a test are the sensitivity and the specificity.
 \begin{itemize}
-	\item Sensitivity is the probability that the test conducted on an infected person turns positive. $Sensitivity = \frac{TP}{TP+FN}$ The reasons for the sensitivity to be suboptimal in the case of RT-qPCR for SARS-CoV-2 can be
-	\subitem low viral load of the patient
-	\subitem poor extraction of the sample from the patient
-	\subitem too little virus particles in the sample
-	\subitem other handling errors
+	\item Sensitivity $Sensitivity = \frac{TP}{TP+FN}$ is the probability that the test conducted on an infected person turns positive. The reasons for the sensitivity to be suboptimal in the case of RT-qPCR for SARS-CoV-2 can be
+	\begin{itemize}
+	\item{low viral load of the patient}
+	\item{poor extraction of the sample from the patient}
+	\item {too little virus particles in the sample}
+	\item {other handling errors}
+	\end{itemize}
+\item Specificity $Specificity = \frac{TN}{TN+FP}$ is the probability that the test conducted on a non-infected person turns negative. The reasons for the specificity to be suboptimal in the case of RT-qPCR for SARS-CoV-2 can be
+	\begin{itemize}
+		\item Non specific binding of the XXX (very unlikely)
+		\item contamination of the collected samples
+		\item other handling errors
+		
+	\end{itemize}
 \end{itemize}
+Such effects have to be modelled accurately, as the evaluation of the testing strategies relies greatly on the scalability and correlation between these errors.\\
 
-\subsection{Modelling Strategies}
-- Monte Carlo Simulation in MATLAB 
+Another measure for the quality of the generated test results are the predictive values:
+\begin{itemize}
+	\item The positive predictive value  $PPV = \frac{TP}{TP+FP}$ describes the probability of a person with a positive test result actually being infected. This value is decreased by an increasing number of false positives.
+	\item The negative predictive value  $NPV = \frac{TN}{TN+FN}$ describes the probability of a person with a negative test result actually being not infected. This value is decreased by an increasing number of false negatives.
+\end{itemize}
+It is important to note that the predictive values differ from the sensitivity and specificity in that they also consider the prevalence.\\
 
-- Indiv Testing (no MC needed)
+A typical problem at very low prevalence arises from the fact that the number of false positives can exceed the number of true positives easily even for tests with a high specificity. \ref{ppv_problem}. In practice, this reduces the usability of tests on large scales without considering symptoms or without considering high risk contacts.\\
 
-- State of the Art Pool Testing
+An important metric for evaluating the efficiency of the test strategies is the average number of tests per tested person. A low value is better as it leads to a higher testing capacity with a given number of available tests. A lower bound for this value can be found by using the information theoretical concept of mutual information. As the total information on the $n$ patient’s states under the assumption of an i.i.d. variable (independent and identically distributed) can be calculated by:
 
-Our aim for the strategies is to pool multiple sample together for better data obtainment. For this we have several pooling-approaches in mind.
-The first one we called CoSplit. This approach is the only approach we simulated yet. Aim of CoSplit is to get the maximum information gain out of the first test and to split the pools up recursively, if the test turns out to be positive. For that we select the ideal start group size regarding the expected prevalence and pool all samples of this group together. If the result of the test is positive we split the group and test every subgroup. We do this until the group size is 1. In case of a negative test result we assume all samples of that pool are negative as well. Therefore there is no need to split negative tested groups into subgroups. Indeed in order to get a more precise result and reduce the number of false test results a retest of a negative tested group is being simulated as well. 
-Yelin et al. describe the results of a COVID-19 RT-qPCR test in multi-sample pools. They came to the conclusion „that a single positive sample can be detected even in pools of up to 32 samples, with an estimated false negative rate of \SI{10}{\percent}“ (Yelin et al. 2020). 
-As an example if we choose a start group size of 32 persons and a split factor of 2 we would mix up the samples of 32 persons and test this sample pool. If the result is negative we would assume (if an additional retest ist also negative) that all of the 32 persons are negative. In case of a positive result we would split the group and mix pools with 16 samples each and test these two pools again. A positive tested group would be split into 8-sample-pools and tested again. This goes on until the infected patient whose sample causes the positive pool test result is identified. In order to account for such detection limits when designing the strategy, we also decided to conduct simulation while limiting the maximum pool size.
-% I would prefer not to use this argument here if at all. In the above mentioned paper of Yelin et al. each of the five positive samples were detected after 37 cycles even though they were diluted with 15 negative samples. Assuming that a pool of 16 samples has a lower false negative rate a start group size of 16 persons might be even better.
+\begin{ceqn}
+	\begin{equation}
+	H_{tot}(p_{inf}) = n \cdot H(p_{inf}) = n \cdot [-p_{inf} \log_2(p_{inf}) - (1-p_{inf}) \log_2(1 - p_{inf})] \si{\Bit}
+	\end{equation}
+\end{ceqn}
 
-%I would prefer an outline on the square method.
-%Sliced Cube
-%Another approach we had in mind focuses not on the maximum information gain, but on receiving a faster result and on testing persons multiple times in order to decrease false results. Therefore we arrange the to-be-tested persons into multidimensional arrays.
-%Again assuming that a good pool size is consisting of 16 samples we use 16-sample-pools for the following example. So if the people who should be tested are arranged in a 3-dimensional array/cube with an edge length of 4 and then slice this array/cube in every dimension into 4 slices each slice would contain 16 people. The whole array/cube would contain 64 (4^3) people.
-%With this pooling method we would be able to reduce the number of tests from 64 test (if each person is tested with one test) to 12 tests (one test for each slice of the array/cube). Theoretically (if we assume the PCR test is always right and neglect the circumstance that the PCR-test could be false) this method has an unambiguous result if not more than one person of the group is infected. #1
-%To increase the probability for getting an unambiguous result in cases of two or more infected people in the group and as an approach to cope with the possibility that a PCR-test is false (due to theoretically impossible results) more tests based on sample pooling could be added. One way of doing that is a diagonal slicing of the array/cube. For every dimension 8 more tests could be added (four slices for direction from upper left to lower right and four for upper right to lower left). Therefore 24 (4*2*3) additional tests would be needed. 
+The information retrieval by a single test is the mutual information, where $X$ is the state (containing virus or not containing virus) of a sample (single sample or pool sample) and $Y$ is the test result (positive or negative):
+\begin{ceqn}
+\begin{equation}
+I(X,Y) = H(X) - H(X|Y)
+\end{equation}
+\end{ceqn}
+For RT-qPCR H(X|Y) is concentration dependent but for a best case estimate and under the assumption of high sensitivity and specificity, $H(X|Y)$ tends towards $0$. \\
+
+An optimal strategy would arrange the tests in such a way, that the entropy $H(X)$ would be maximized at \SI{1}{\Bit} while multiple tests do not retrieve parts of the same Information. As a result, each test can yield a maximum of \SI{1}{\Bit} of information, while the total information is $H_{tot}(p_{inf})$. A perfect strategy from an information theoretical standpoint would therefore be capable of retrieving the entire Information with $\frac{H_{tot}(p_{inf})}{\SI{1}{\Bit}}$ tests. When dividing the number of required tests by the number of patients $n$, we will find that the entropy $H(p_{inf})$ is equal to the average tests per patient of an optimal strategy. While this strategy might not exist in reality, this value will be used as a lower bound for our metric.\\
+
+If we divide that lower bound by the number of tests of an arbitrary testing strategy at a given prevalence, we have an indication for how efficient a test is in terms of information retrieval. One must consider that this number does not take into account the quality or correctness of the test results. It is therefore possible to get efficiencies $> \SI{100}{\percent} $ if we regard strategies with a significant amount of errors (e.g. not testing anyone and declaring everyone as negative). 
 
 
-%#1 [insert calculation regarding prevalence and the expected number of infected in a group of 64 people]
+\subsection{Modelling the Testing Strategies}
+
+The model of the testing strategy is crucial in order to properly evaluate the increase in testing capacity and the deviation in test quality. As we made some assumptions and simplifications that are not scientifically proven, the results should be regarded with a certain critical distance. \\
+
+The reason to use a model is to get some initial guesses on which strategies might have potential for improving our current situation and to optimize or improve under certain assumptions. Without a model, this work would require a very high number of tests and samples in order to get robust statistical outputs.
+
+
+\subsubsection{State of the Art Individual Testing}
+
+A testing method commonly used is the individual testing. People can be tested individually and get the result, depending on the test type (PCR, antigen etc.), a few hours or days after testing. Thus, we have an efficiency of one test per person without diluting the sample. The overall sensitivity and specificity is determined solely by the diagnostic test. No simulation is necessary at this point.
+
+\subsubsection{Testing Methods with Monte Carlo}
+
+Monte Carlo Simulation is a statistical algorithm in computer science and it relies on random sampling. One of the usages of {mcs} is to statistically describe the output of a system, when it is being given a probability distribution as input. \\
+
+In our work, the system consists of the testing strategy and the input distribution is the prevalence and viral load. The test results are being returned by the system, such that we can evaluate the tests performance based on the statistical confusion between the input and the output. The {mcs} produces a large number of samples, which are handed over to the system. If the number of samples is chosen sufficiently high, the statistical output approaches a limit.\\
+
+We use different methods to analyse the testing capacity since the testing situation can be different. Thus, our monte carlo simulation program is adaptable to various strategies and diagnostic tests. We applied this simulation to state of the art sample pooling and to our “CoSplit” method, while other methods are still left to be implemented. We suggest another promising candidate in the appendix. In our implementations, each strategy can be modified and adjusted by using parameters e.g. “Double test negative pools”, “Limit of pool size” and “Divisor of the pool size for each split”.
+
+
+\subsubsection{ State of the Art Pool Testing}
+
+Pool testing is commonly used for Trichinella examination for boar meat \cite{Trichinen}. Typically pools of samples are created by mixing them together, tested and if the result turns out positive the corresponding samples are tested on an individual basis. 
+
+\subsubsection{CoSplit}
+Our aim for the strategies is to pool multiple samples together for better data obtainment. For this we have several approaches in mind. The aim of CoSplit is to get the maximum amount of information out of the first test and to split the pools up recursively, if the test turns out to be positive. An information theoretical investigation shows that the following tests continue to be rather efficient compared to individual testing.\\
+
+As a first step we select the ideal pool size for the first test by considering the expected prevalence. We then perform a test on this pool. If the result of the test is positive we split the group and test every subgroup. We recursively do this until the group size is 1.\\
+
+In case of a negative test result we assume all samples of that pool do not contain any virus. Therefore there is no need to split negative tested groups into subgroups. Fig. \ref{fig:CoSplit_Scheme} shows the scheme of such strategy, while a more detailed example can be found in \ref{append:example_CoSplit}.\\
+
+In order to get a more sensitive performance, we can set a parameter, which enables the retesting of negatively tested pools above a certain size. This should reduce the number of false negative test results. Yelin et al. describe the results of a COVID-19 RT-qPCR test in multi-sample pools. They came to the conclusion „that a single positive sample can be detected even in pools of up to 32 samples, with an estimated false negative rate of 10\%“ \cite{Yelin_2020}. In order to account for such detection limits, we also decided to conduct simulations while limiting the maximum pool size.
+
+
+
+
+
 
 
 
 \section{Analytical Optimization}
+
+In order to find a good or even the optimal pool size for testing, we will use some stochastic and information theoretical estimates. We will only consider the test efficiency and neglect the test errors for our optimization. \\
+
+For state of the art pool testing, we can use the optimization that is used for the poisoned drink problem \cite{poisoned_drink}. We must therefore minimize the expected number of tests per tested person:
+
+\begin{equation}
+min_{n\in \mathbb{N}}  E[#test_n] = 1/n+(1-(1-p_{inf})^n)
+\end{equation}
+
+This is done by brute force in our simulation.
+For the CoSplit strategy we try to maximize the entropy of the first test, which can be achieved, if both outcomes of a test are equally probable. This is the case if and only if the probability for no contaminated sample within the pool is \SI{50}{\percent}.
+The probability distribution for $k_{pos}$ contaminated samples within a pool of $n$ samples with the contamination probability $p_{inf}$ is a binomial distribution if the occurrence of contaminated samples is independently distributed: 
+$$p_{k_{pos},n} = \binom{n}{k_{pos}} * p_{inf}^{k_{pos}} * (1-p_{inf})^{n-k_{pos}}$$
+As we try to find an $n$ such that the probability p_{k_{pos},n} with $k_{pos} = 0$, we set this equal to $0.5$ and solve for $n$ which yields.
+$$n = \frac{-1}{\log_2(1-p_{inf})$$ This has to be rounded as we only allow integers for the pool size.
+
+
 \label{sec:analytics}
 - Group size Optimization for Standard pool test
 
