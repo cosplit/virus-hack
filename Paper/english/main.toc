@@ -1,0 +1,32 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Methods}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Information Theory}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}RT-qPCR}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Assumptions}{4}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}PCR simple}{4}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}PCR dilution dependent}{5}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Viral Load}{5}{subsubsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.4}Strategy Evaluation Measure}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Modelling the Testing Strategies}{7}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Testing Methods with Monte Carlo}{7}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}State of the Art Individual Testing}{7}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.3} State of the Art Pool Testing}{7}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.4}CoSplit}{7}{subsubsection.2.5.4}%
+\contentsline {section}{\numberline {3}Analytical Optimization}{8}{section.3}%
+\contentsline {section}{\numberline {4}Simulation Results}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Reflecting on the robustness of the simulation and the assumptions}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Single Testing and State of the Art Pool Testing}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}CoSplit Simple}{9}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Improving CoSplit simple}{9}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}CoSplit with a limited pool size}{9}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}CoSplit with retesting of negative tests}{9}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}CoSplit with retesting of contradictory tests}{9}{subsubsection.4.4.3}%
+\contentsline {section}{\numberline {5}Conclusion}{10}{section.5}%
+\contentsline {section}{\numberline {6}Further Research}{10}{section.6}%
+\contentsline {section}{\numberline {A}Example: CoSplit}{11}{appendix.A}%
+\contentsline {section}{\numberline {B}Novel Geometrically Inspired Pooling Strategies}{11}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Example: Square Pool}{11}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Higher Dimensionality}{11}{subsection.B.2}%
+\contentsfinish 
